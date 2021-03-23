@@ -1,6 +1,3 @@
-# R-Assignment
-This is the R-Assignment Repository
-
 # Molly's assignment reviewed by Ashenafi Beyi
 # Date: March 22, 2021
 
