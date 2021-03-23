@@ -1,0 +1,147 @@
+---
+title: "R Assignment Peer Review"
+author: "Mudith Ekanayake"
+date: "3/22/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## First things first! Great job!
+
+* You have done a great job with the assignment. I have a very few comments about the code and the whole assignment.
+
+## Missing some files
+
+I can't see your generated files in your repository. You need to add those files as well. I created two folders for maize and teosinte. You can do the same. Also in the instructions it is mentioned that we should include three different files;
+    * a README.md file describing its general organization
+    * a separate file in the "R Markdown" format that contains both the code and the description of the workflow, and
+    * an output file in either HTML or PDF format
+I see you have a README file. You just need to update it adding the organization of the repository. You also don't have the html or pdf file.
+
+## Coding
+
+### Formatting of Rmd file
+
+I see some duplications at the start of the R markdown file. You can remove one set of title, author etc.. It is mentioned in the instructions that one should be able to replicate the results by simply running it with "Run all" command. But your R markdown file doesn't do that. May be it's because it doesn't have the correct Rmd formatting. Try this. Include all your codes inside these symbols as follows. Also add knitr part as well. It will let the program know about the formatting.
+
+---
+title: "R_assignment_README"
+author: "Molly Bledsoe"
+date: "3/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Data Inspection: fang_et_al_genotypes.txt
+
+```{r}
+fang_genotypes <- read.csv("fang_et_al_genotypes.txt", header = TRUE, sep = "\t")
+```
+
+##Commands used to inspect fang_genotypes:
+```{r}
+  typeof(fang_genotypes)
+  file.size("fang_et_al_genotypes.txt")
+  length(fang_genotypes)
+  dim(fang_genotypes)
+  nrow(fang_genotypes)
+  ncol(fang_genotypes)
+  names(fang_genotypes)
+  class(fang_genotypes)
+  sapply(fang_genotypes,class)
+  str(fang_genotypes)
+```
+  
+##What I learned from inspecting this file:
+##This file is a list
+##This file has a size of 11054722 
+##This file contains 986 elements
+##This file has dimensions of 2782 x 986
+##This file has 2782 rows
+##This file has 986 columns
+##This file's class is data.frame
+##his file contains base-pairs (known and unknown)found on chromosomes and the Sample_ID
+  
+#Data Inspection: snp_position.txt
+
+```{r}
+snp_position <- read.csv("snp_position.txt", header = TRUE, sep = "\t")
+```
+
+##Commands used to inspect snp:
+
+```{r}
+  typeof(snp_position)
+  file.size("snp_position.txt")
+  length(snp_position)
+  dim(snp_position)
+  nrow(snp_position)
+  ncol(snp_position)
+  names(snp_position)
+  class(snp_position)
+  sapply(snp_position,class)
+  str(snp_position)
+```
+  
+##What I learned from inspecting this file:
+##This file is a list
+##This file has a size of 83747
+##This file contains 15 elements
+##This file has dimensions of 983 x 15
+##This file has 983 rows
+##This file has 15 columns
+##The first row contains SNP_ID
+##The third row contains the Chromosome numbers
+##The forth row contains the positions
+  
+# Data Processing:
+
+##Grab the maize and teosinte groups:
+
+```{r}
+maize <- fang_genotypes[fang_genotypes$Group=="ZMMIL" | fang_genotypes$Group=="ZMMLR" | fang_genotypes$Group=="ZMMMR",]
+  
+teosinte <- fang_genotypes[fang_genotypes$Group=="ZMPBA" | fang_genotypes$Group=="ZMPIL" | fang_genotypes$Group=="ZMPJA",]  
+```
+  
+##Grab the desired snp_position columns:
+
+```{r}
+snp_organized <- snp_position[c(1,3,4)]
+```
+
+##Transpose maize and teosinte files:
+
+```{r}
+maize_transposed <- as.data.frame(t(maize))
+colnames(maize_transposed) <- maize$Sample_ID
+
+teosinte_transposed <- as.data.frame(t(maize))
+colnames(maize_transposed) <- maize$Sample_ID
+```
+
+##Join the maize/teosinte_transposed files with the snp_organized file:
+
+```{r}
+joined_snp_maize_transposed <- merge(x = snp_organized,y = maize_transposed, by.x="SNP_ID", by.y="row.names", all.y = TRUE)
+
+joined_snp_teosinte_transposed <- merge(x = snp_organized,y = teosinte_transposed, by.x="SNP_ID", by.y="row.names", all.y = TRUE)
+```
+
+If you click the green arrow at the top right corner in every chunk of code, it'll run that particular code. If you click Run all command from the "Run drop down menu" at the top, it'll run the whole file by just one click. And I mentioned that you don't have the html or pdf file. So in the top bar, you can see an blue icon saying Knit. So if you click that you can get the html file since you have given the default output as "html_document". But in Knit, you can select the pdf output as well from the drop down menu of Knit.
+
+### Using loops or lapply()/sapply()
+
+You have used 10 separate lines to generate 10 files. One line per each file. You can use loops or more particularly lapply()/sapply() functions to make it shorter and easier. I did use loops but I'm also going to try lapply()/sapply() functions.
+
+## That's all
+
+I think all other parts look fine. You have done a nice job. Wish you good luck with the assignment.
+
+-Mudith Ekanayake - 03/22/2021
